@@ -53,6 +53,15 @@ class MovieInfo:
             instance.comment = item.select('.comment')[0].text.strip()
         return instance
 
+    def __str__(self):
+        s = []
+        for k in self.__dict__:
+            s.append("{key}={value}".format(key=k, value=self.__dict__.get(k)))
+        return ', '.join(s)
+
+    def __repr__(self):
+        return self.__str__()
+
 
 class MovieReview:
     def __init__(self):
@@ -70,6 +79,15 @@ class MovieReview:
         if m:
             instance.id = m.group(0)
         return instance
+
+    def __str__(self):
+        s = []
+        for k in self.__dict__:
+            s.append("{key}={value}".format(key=k, value=self.__dict__.get(k)))
+        return ', '.join(s)
+
+    def __repr__(self):
+        return self.__str__()
 
 
 class MovieExport:
@@ -137,6 +155,8 @@ class MovieExport:
 
     def get_reviews(self):
         """
+        Get one's all movie reviews
+
         https://movie.douban.com/people/einverne/reviews?start=0
         https://movie.douban.com/j/review/10000057/fullinfo?show_works=False
         """
@@ -148,7 +168,9 @@ class MovieExport:
                 break
             for review in reviews_list:
                 r = MovieReview.parse(review)
-                r.content = self.get_review_content(r.id)
+                content = self.get_review_content(r.id)
+                bs = BeautifulSoup(content, 'html.parser')
+                r.content = bs.text
                 yield r
             start += step
 
@@ -171,9 +193,10 @@ class MovieExport:
         """
         pass
 
-    def get_review_content(self, id='10046247'):
+    def get_review_content(self, id='10124597'):
         """
-            https://movie.douban.com/j/review/10000057/fullinfo?show_works=False
+        Get all review content by pass ID, return the content str
+            https://movie.douban.com/j/review/10124597/fullinfo?show_works=False
         :param id:
         :return:
         """

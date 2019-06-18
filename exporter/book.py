@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import re
 
 import requests
 from bs4 import BeautifulSoup
@@ -31,6 +30,15 @@ class BookInfo(object):
             instance.comment = item.select('.comment')[0].text.strip()
         return instance
 
+    def __str__(self):
+        s = []
+        for k in self.__dict__:
+            s.append("{key}={value}".format(key=k, value=self.__dict__.get(k)))
+        return ', '.join(s)
+
+    def __repr__(self):
+        return self.__str__()
+
 
 class BookExport:
     BASE_URL = 'https://book.douban.com/people/{}'
@@ -42,7 +50,7 @@ class BookExport:
         self.user_url = BookExport.BASE_URL.format(nickname)
 
     def get_books(self, path=READ):
-        start=0
+        start = 0
         while True:
             item_list = self.__get_book_list(path, start)
             step = len(item_list)
