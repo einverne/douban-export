@@ -30,5 +30,5 @@ setup(
     long_description=read('README.md'),
     include_package_data=True,
     install_requires=requirements,
-    entry_points={'console_scripts': ['douban=src.__main__:main']},
+    entry_points={'console_scripts': ['douban=entry.__main__:main']},
 )
