@@ -5,12 +5,16 @@
 ## Python
 Python 版本基于 Python 3.6.x ，其他版本暂未测试。
 
-主要实现为如下两个文件：
+主要实现:
 
-- movie_export.py
-- book_export.py
+- 电影导出
+- 书籍导出
+- 音乐导出
+- 日记导出
 
 ![result](screenshot/screenshot-output-result.png)
+
+关于豆瓣相册导出可以参考我 [这个](https://github.com/einverne/douban-dl) 项目。
 
 ## JS
 
