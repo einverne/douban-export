@@ -51,7 +51,7 @@ class NotesExport:
         """
         start = 0
         while True:
-            note_list = self.__get_reviews_list(start)
+            note_list = self.__get_notes_list(start)
             step = len(note_list)
             if step == 0:
                 break
@@ -65,7 +65,7 @@ class NotesExport:
                 break
             start += step
 
-    def __get_reviews_list(self, start=0):
+    def __get_notes_list(self, start=0):
         url = self.user_url + '/notes'
         r = requests.get(url, params={
             'type': 'note',
