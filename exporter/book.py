@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import requests
 from bs4 import BeautifulSoup
 
-from exporter import r0, BaseExporter, BaseReview
+from exporter import *
 
 
 class BookInfo(object):
@@ -53,14 +52,11 @@ class BookReview(BaseReview):
 
 class BookExport(BaseExporter):
     BASE_URL = 'https://book.douban.com/people/{}'
-    READ = 'collect'
-    WISH = 'wish'
-    DOING = 'do'
 
     def __init__(self, nickname):
         self.user_url = BookExport.BASE_URL.format(nickname)
 
-    def get_books(self, path=READ):
+    def get_books(self, path=COLLECT):
         start = 0
         while True:
             item_list = self.__get_book_list(path, start)
@@ -73,7 +69,7 @@ class BookExport(BaseExporter):
                 break
             start += step
 
-    def __get_book_list(self, path=READ, start=0):
+    def __get_book_list(self, path=COLLECT, start=0):
         url = self.user_url + '/' + path
         r = requests.get(url, params={
             'start': start,
@@ -90,13 +86,13 @@ class BookExport(BaseExporter):
         return soup.select('.item')
 
     def get_read(self):
-        return self.get_books(self.READ)
+        return self.get_books(COLLECT)
 
     def get_wish(self):
-        return self.get_books(self.WISH)
+        return self.get_books(WISH)
 
     def get_reading(self):
-        return self.get_books(self.DOING)
+        return self.get_books(DOING)
 
     def get_reviews(self):
         start = 0

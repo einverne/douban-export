@@ -3,8 +3,7 @@
 import unittest
 from unittest import TestCase
 
-from bs4 import BeautifulSoup
-
+from exporter import *
 from exporter.movie import MovieExport
 from utils.logutil import get_logger
 
@@ -17,7 +16,7 @@ class TestMovieExport(TestCase):
         self.exporter = MovieExport("einverne")
 
     def test_get_movies(self):
-        movies = self.exporter.get_movies(MovieExport.WATCHED)
+        movies = self.exporter.get_movies(COLLECT)
         for m in movies:
             log.debug(m)
             self.assertIsNotNone(m, 'content should not be none')

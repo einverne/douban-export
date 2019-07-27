@@ -1,11 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import re
 
-import requests
 from bs4 import BeautifulSoup
 
-from exporter import r0, BaseExporter, BaseReview
+from exporter import *
 
 """
 <li class="item" id="list27617348">
@@ -79,14 +77,11 @@ class MovieExport(BaseExporter):
     遍历网页的问题可能被豆瓣反爬虫机制伤及，如果能够直接从接口 dump 数据就比较快
     """
     BASE_URL = 'https://movie.douban.com/people/{}'
-    WATCHED = 'collect'
-    WISH = 'wish'
-    DOING = 'do'
 
     def __init__(self, nickname):
         self.user_url = MovieExport.BASE_URL.format(nickname)
 
-    def get_movies(self, path=WATCHED):
+    def get_movies(self, path=COLLECT):
         """
         https://movie.douban.com/people/einverne/collect
         第 1 页 https://movie.douban.com/people/einverne/collect?start=0&sort=time&rating=all&filter=all&mode=grid
@@ -131,11 +126,11 @@ class MovieExport(BaseExporter):
 
     def get_wish(self):
         """https://movie.douban.com/people/einverne/wish"""
-        return self.get_movies(self.WISH)
+        return self.get_movies(WISH)
 
     def get_doing(self):
         """https://movie.douban.com/people/einverne/do"""
-        return self.get_movies(self.DOING)
+        return self.get_movies(DOING)
 
     def get_reviews(self):
         """

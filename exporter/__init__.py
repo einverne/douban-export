@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import re
-import requests
 import abc
+import re
+
+import requests
 
 
 def r0(pattern, text):
@@ -46,6 +47,11 @@ class BaseReview:
 
     def __repr__(self):
         return self.__str__()
+
+
+COLLECT = 'collect'
+WISH = 'wish'
+DOING = 'do'
 
 
 class BaseExporter:

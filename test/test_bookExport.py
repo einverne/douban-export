@@ -3,10 +3,12 @@
 import unittest
 from unittest import TestCase
 
+from exporter import *
 from exporter.book import BookExport
 from utils.logutil import get_logger
 
 log = get_logger(__name__)
+
 
 class TestBookExport(TestCase):
 
@@ -14,7 +16,7 @@ class TestBookExport(TestCase):
         self.exporter = BookExport("einverne")
 
     def test_get_books(self):
-        books = self.exporter.get_books(BookExport.READ)
+        books = self.exporter.get_books(COLLECT)
         for book in books:
             log.debug(book)
             self.assertIsNotNone(book, "book object fetch failed")
@@ -46,12 +48,12 @@ class TestBookExport(TestCase):
             break
 
     # def test_get_reviews(self):
-        # readed = self.exporter.get_reviews()
-        # for b in readed:
-        #     log.debug(b)
-        #     self.assertIsNotNone(b, 'book object fetch failed')
-        #     self.assertNotEqual(b.title, '', 'book title fetch failed')
-        #     break
+    # readed = self.exporter.get_reviews()
+    # for b in readed:
+    #     log.debug(b)
+    #     self.assertIsNotNone(b, 'book object fetch failed')
+    #     self.assertNotEqual(b.title, '', 'book title fetch failed')
+    #     break
 
 
 if __name__ == '__main__':

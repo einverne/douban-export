@@ -1,11 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import re
 
-import requests
 from bs4 import BeautifulSoup
 
-from exporter import r0, BaseExporter, BaseReview
+from exporter import *
 
 
 class MusicInfo:
@@ -58,14 +56,11 @@ class MusicExport(BaseExporter):
     遍历网页的问题可能被豆瓣反爬虫机制伤及，如果能够直接从接口 dump 数据就比较快
     """
     BASE_URL = 'https://music.douban.com/people/{}'
-    WATCHED = 'collect'
-    WISH = 'wish'
-    DOING = 'do'
 
     def __init__(self, nickname):
         self.user_url = MusicExport.BASE_URL.format(nickname)
 
-    def get_musics(self, path=WATCHED):
+    def get_musics(self, path=COLLECT):
         """
         https://music.douban.com/people/einverne/collect
         第 1 页 https://music.douban.com/people/einverne/collect?start=0&sort=time&rating=all&filter=all&mode=grid
@@ -105,16 +100,16 @@ class MusicExport(BaseExporter):
         item_list = soup.select('.item')
         return item_list
 
-    def get_watched(self):
+    def get_listened(self):
         return self.get_musics()
 
     def get_wish(self):
         """https://music.douban.com/people/einverne/wish"""
-        return self.get_musics(self.WISH)
+        return self.get_musics(WISH)
 
     def get_doing(self):
         """https://music.douban.com/people/einverne/do"""
-        return self.get_musics(self.DOING)
+        return self.get_musics(DOING)
 
     def get_reviews(self):
         """

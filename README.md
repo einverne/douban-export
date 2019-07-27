@@ -16,6 +16,31 @@ Python 版本基于 Python 3.6.x ，其他版本暂未测试。
 
 关于豆瓣相册导出可以参考我 [这个](https://github.com/einverne/douban-dl) 项目。
 
+### 命令使用
+
+设置
+
+    douban-export setup
+    
+输入 uesr id，会将用户ID保存到 HOME 目录的 `~/.douban-export` 文件中，如果预先设置，一下的命令可以省略 `-u` 选项。
+
+导出电影
+
+    douban-export movie -u einverne -t wish -o wish_movie.csv
+
+说明：
+
+- `-t` 参数可以选择 `collect` 看过，`wish` 想看, `doing` 在看
+
+导出书籍
+
+    douban-export book -u einverne -t wish -o wish_book.csv
+    
+同理
+
+    douban-export music -u einverne -t wish -o wish_music.csv
+    
+
 ## JS
 
 userscript 主要来自于

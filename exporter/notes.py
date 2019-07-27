@@ -33,14 +33,14 @@ class NoteInfo:
         return self.__str__()
 
 
-class NotesExport:
+class NoteExport:
     """
     遍历网页的问题可能被豆瓣反爬虫机制伤及，如果能够直接从接口 dump 数据就比较快
     """
     BASE_URL = 'https://www.douban.com/people/{}'
 
     def __init__(self, nickname):
-        self.user_url = NotesExport.BASE_URL.format(nickname)
+        self.user_url = NoteExport.BASE_URL.format(nickname)
 
     def get_notes(self):
         """
@@ -97,6 +97,6 @@ class NotesExport:
 
 
 if __name__ == '__main__':
-    m = NotesExport('einverne')
+    m = NoteExport('einverne')
     for note in m.get_notes():
         print(note)
