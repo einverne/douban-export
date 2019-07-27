@@ -5,6 +5,8 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
+from exporter import r0, BaseExporter, BaseReview
+
 
 class MusicInfo:
     def __init__(self):
@@ -41,34 +43,17 @@ class MusicInfo:
         return self.__str__()
 
 
-class MusicReview:
-    def __init__(self):
-        self.title = ''
-        self.url = ''
-        self.id = ''
-        self.content = ''
+class MusicReview(BaseReview):
 
-    @classmethod
-    def parse(cls, item):
-        instance = cls()
-        instance.title = item.select('h3')[0].text.strip()
-        instance.url = item.select('h3 > a')[0]['href']
-        m = re.search(r'\d+', instance.url)
-        if m:
-            instance.id = m.group(0)
-        return instance
-
-    def __str__(self):
-        s = []
-        for k in self.__dict__:
-            s.append("{key}={value}".format(key=k, value=self.__dict__.get(k)))
-        return ', '.join(s)
-
-    def __repr__(self):
-        return self.__str__()
+    def parse(self, item):
+        self.title = item.select('h3')[0].text.strip()
+        self.url = item.select('h3 > a')[0]['href']
+        self.id = r0(r'\d+', self.url)
+        self.publish_time = item.select('.review-create-time')[0].text.strip()
+        return self
 
 
-class MusicExport:
+class MusicExport(BaseExporter):
     """
     遍历网页的问题可能被豆瓣反爬虫机制伤及，如果能够直接从接口 dump 数据就比较快
     """
@@ -145,10 +130,10 @@ class MusicExport:
             if step == 0:
                 break
             for review in reviews_list:
-                r = MusicReview.parse(review)
+                r = MusicReview()
+                r.parse(review)
                 content = self.get_review_content(r.id)
-                bs = BeautifulSoup(content, 'html.parser')
-                r.content = bs.text
+                r.update(content)
                 yield r
             start += step
 
@@ -162,7 +147,7 @@ class MusicExport:
             'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
         })
         soup = BeautifulSoup(r.text, 'html.parser')
-        return soup.select('.tlst')
+        return soup.select('.comment-item')
 
     def get_doulist(self):
         """
@@ -171,30 +156,15 @@ class MusicExport:
         """
         pass
 
-    def get_review_content(self, id='10124597'):
-        """
-        Get all review content by pass ID, return the content str
-            https://music.douban.com/j/review/10124597/fullinfo?show_works=False
-        :param id:
-        :return:
-        """
-        url = "https://music.douban.com/j/review/{}/fullinfo?show_works=False".format(id)
-        r = requests.get(url, headers={
-            'Host': 'music.douban.com',
-            'Referer': self.user_url + '/reviews?start=10',
-            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
-        })
-        return r.json()['html']
-
 
 if __name__ == '__main__':
     m = MusicExport('einverne')
     # l = m.get_musics()
     # for item in l:
     #     print(item)
-    wishes = m.get_wish()
-    for wish in wishes:
-        print(wish)
+    # wishes = m.get_wish()
+    # for wish in wishes:
+    #     print(wish)
     reviews = m.get_reviews()
     for r in reviews:
         print(r)

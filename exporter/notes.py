@@ -3,7 +3,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-from exporter import r1
+from exporter import r0
 
 
 class NoteInfo:
@@ -19,7 +19,7 @@ class NoteInfo:
         instance = cls()
         instance.title = item.select('h3')[0].text.strip()
         instance.url = item['data-url']
-        instance.id = r1(r'\d+', instance.url)
+        instance.id = r0(r'\d+', instance.url)
         instance.publish_time = item.select('.pub-date')[0].text.strip()
         return instance
 
