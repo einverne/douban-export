@@ -2,7 +2,7 @@ beautifulsoup4==4.7.1
 certifi==2019.6.16
 chardet==3.0.4
 idna==2.8
-lxml==4.3.4
+lxml==4.6.5
 PySocks==1.7.0
 requests==2.22.0
 soupsieve==1.9.1
